@@ -1,6 +1,7 @@
 package com.befiring.easypicture.network;
 
 import com.befiring.easypicture.bean.Image;
+import com.befiring.easypicture.bean.Joke;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ import rx.Observable;
  */
 public interface ApiService {
     @GET("search")
-    Observable<List<Image>> search(@Query("q") String query);
+    Observable<List<Image>> searchPicture(@Query("q") String query);
+    @GET("content/list.from")
+    Observable<List<Joke>> getJokeData(@Query("key") String key,@Query("sort") String sort,@Query("page") int page,@Query("pagesize") int pageSize,@Query("time") String time);
 }

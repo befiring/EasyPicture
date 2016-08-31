@@ -16,11 +16,11 @@ public class Network {
     private static Converter.Factory gsonConverterFactory = GsonConverterFactory.create();
     private static CallAdapter.Factory rxJavaCallAdapterFactory = RxJavaCallAdapterFactory.create();
     private static ApiService service;
-    public static ApiService getApiService(){
+    public static ApiService getApiService(String url){
         if(service==null){
             Retrofit retrofit=new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://zhuangbi.info/")
+                    .baseUrl(url)
                     .addConverterFactory(gsonConverterFactory)
                     .addCallAdapterFactory(rxJavaCallAdapterFactory)
                     .build();

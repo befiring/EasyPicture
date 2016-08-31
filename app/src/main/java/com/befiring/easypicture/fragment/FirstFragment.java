@@ -16,13 +16,11 @@ import com.befiring.easypicture.adapter.FirstGridAdapter;
 import com.befiring.easypicture.bean.Image;
 import com.befiring.easypicture.network.Network;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -46,12 +44,12 @@ public class FirstFragment extends BaseFragment {
     Observer<List<Image>> observer = new Observer<List<Image>>() {
         @Override
         public void onCompleted() {
-
+            int b=0;
         }
 
         @Override
         public void onError(Throwable e) {
-
+               int a=0;
         }
 
         @Override
@@ -79,8 +77,8 @@ public class FirstFragment extends BaseFragment {
             public void onClick(View view) {
                 unsubscribe();
                 refreshLayout.setRefreshing(true);
-                subscription= Network.getApiService()
-                        .search(search_et.getText().toString())
+                subscription= Network.getApiService("http://zhuangbi.info/")
+                        .searchPicture(search_et.getText().toString())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer);
