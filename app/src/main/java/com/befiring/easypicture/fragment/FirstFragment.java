@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.befiring.easypicture.R;
 import com.befiring.easypicture.adapter.FirstGridAdapter;
@@ -20,6 +22,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.smssdk.EventHandler;
+import cn.smssdk.OnSendMessageHandler;
+import cn.smssdk.SMSSDK;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -37,6 +42,8 @@ public class FirstFragment extends BaseFragment {
     EditText search_et;
     @Bind(R.id.search_btn)
     Button search_btn;
+    @Bind(R.id.submit)
+    Button submit_btn;
 
     private static FirstFragment instance;
     FirstGridAdapter adapter;
@@ -64,7 +71,7 @@ public class FirstFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         ButterKnife.bind(this, view);
-
+        SMSSDK.registerEventHandler(eh); //注册短信回调
 
         adapter=new FirstGridAdapter();
         refreshLayout.setEnabled(false);
@@ -82,9 +89,23 @@ public class FirstFragment extends BaseFragment {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer);
+                getSMS("86","13392533903");
+            }
+        });
+        submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("wm","submit click");
+                 SMSSDK.submitVerificationCode("86","13392533903",search_et.getText().toString());
             }
         });
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        SMSSDK.unregisterEventHandler(eh);
+        super.onDestroyView();
     }
 
     public static FirstFragment getInstance() {
@@ -94,13 +115,45 @@ public class FirstFragment extends BaseFragment {
         return instance;
     }
 
-//    private List<Image> getData() {
-//        List<Image> list = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            Image image = new Image("安静", "http://zhuangbi.idagou.com/i/2016-06-25-7f28e26f4b0d6c071492d6d0793cfe0d.jpg?");
-//            list.add(image);
-//        }
-//        return list;
-//    }
+   public void getSMS(String country,String phone){
+       SMSSDK.getSupportedCountries();
+       SMSSDK.getVerificationCode(country, phone, new OnSendMessageHandler() {
+           @Override
+           public boolean onSendMessage(String s, String s1) {
+               Log.d("wm",s+"---"+s1);
+               return false;
+           }
+       });
+   }
+
+    EventHandler eh=new EventHandler(){
+
+        @Override
+        public void afterEvent(int event, int result, Object data) {
+
+            if (result == SMSSDK.RESULT_COMPLETE) {
+                //回调完成
+                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getActivity(),"校验成功",Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+                    Log.d("wm","校验成功");
+                    //提交验证码成功
+                }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                    //获取验证码成功
+                }else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+                    //返回支持发送验证码的国家列表
+                }
+
+            }else{
+                ((Throwable)data).printStackTrace();
+            }
+        }
+
+    };
+
 
 }

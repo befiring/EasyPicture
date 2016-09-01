@@ -21,6 +21,13 @@
             android:layout_weight="1"
             android:layout_margin="10dp"
             android:text="search" />
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="submit"
+            android:layout_margin="10dp"/>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout

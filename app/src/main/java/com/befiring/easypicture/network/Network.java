@@ -17,15 +17,15 @@ public class Network {
     private static CallAdapter.Factory rxJavaCallAdapterFactory = RxJavaCallAdapterFactory.create();
     private static ApiService service;
     public static ApiService getApiService(String url){
-        if(service==null){
+//        if(service==null){
             Retrofit retrofit=new Retrofit.Builder()
                     .client(okHttpClient)
                     .baseUrl(url)
                     .addConverterFactory(gsonConverterFactory)
                     .addCallAdapterFactory(rxJavaCallAdapterFactory)
                     .build();
-            service=retrofit.create(ApiService.class);
-        }
-        return service;
+//            service=retrofit.create(ApiService.class);
+//        }
+        return retrofit.create(ApiService.class);
     }
 }
