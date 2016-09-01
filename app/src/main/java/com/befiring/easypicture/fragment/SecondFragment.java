@@ -9,10 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.befiring.easypicture.R;
-import com.befiring.easypicture.bean.Joke;
+import com.befiring.easypicture.bean.JokeResponse.JokeResponse;
 import com.befiring.easypicture.network.Network;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,7 +27,7 @@ public class SecondFragment extends BaseFragment{
     @Bind(R.id.text)TextView textView;
     public static SecondFragment instance;
 
-    Observer<List<Joke>> observer=new Observer<List<Joke>>() {
+    Observer<JokeResponse> observer=new Observer<JokeResponse>() {
         @Override
         public void onCompleted() {
             int a=0;
@@ -41,8 +39,8 @@ public class SecondFragment extends BaseFragment{
         }
 
         @Override
-        public void onNext(List<Joke> jokes) {
-             textView.setText(jokes.get(1).getReason());
+        public void onNext(JokeResponse response) {
+             textView.setText(response.getResult().getData().get(0).getContent()+"\n"+response.getResult().getData().get(1).getContent());
         }
     };
     @Nullable
@@ -57,7 +55,7 @@ public class SecondFragment extends BaseFragment{
             public void onClick(View view) {
                 unsubscribe();
                 subscription= Network.getApiService("http://japi.juhe.cn/joke/")
-                        .getJokeData("8e10be3f8234d89f061d18ba5150a7d1","asc",1,1,String.valueOf(System.currentTimeMillis()))
+                        .getJokeData("8e10be3f8234d89f061d18ba5150a7d1","asc",1,2,"1418745237")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer);

@@ -1,6 +1,5 @@
 package com.befiring.easypicture.adapter;
 
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.befiring.easypicture.R;
-import com.befiring.easypicture.bean.Image;
+import com.befiring.easypicture.bean.PictureResponse.Image;
 import com.bumptech.glide.Glide;
 
 import java.util.List;

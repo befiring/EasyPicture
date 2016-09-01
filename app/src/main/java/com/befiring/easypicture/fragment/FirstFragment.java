@@ -13,7 +13,7 @@ import android.widget.EditText;
 
 import com.befiring.easypicture.R;
 import com.befiring.easypicture.adapter.FirstGridAdapter;
-import com.befiring.easypicture.bean.Image;
+import com.befiring.easypicture.bean.PictureResponse.Image;
 import com.befiring.easypicture.network.Network;
 
 import java.util.List;
